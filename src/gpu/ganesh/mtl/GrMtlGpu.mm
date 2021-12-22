@@ -99,9 +99,11 @@ GrMtlGpu::GrMtlGpu(GrDirectContext* direct, const GrContextOptions& options,
 #endif
     fCurrentCmdBuffer = GrMtlCommandBuffer::Make(fQueue);
 #if GR_METAL_SDK_VERSION >= 230
+#if !(defined(TARGET_OS_TV) && TARGET_OS_TV)
     if (@available(macOS 11.0, iOS 14.0, tvOS 14.0, *)) {
         fBinaryArchive = (__bridge id<MTLBinaryArchive>)(binaryArchive);
     }
+#endif
 #endif
 }
 
@@ -1847,9 +1849,11 @@ void GrMtlGpu::onDumpJSON(SkJSONWriter* writer) const {
     }
 #endif  // SK_BUILD_FOR_MAC
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 101500 || __IPHONE_OS_VERSION_MAX_ALLOWED >= 130000
+#if !(defined(TARGET_OS_TV) && TARGET_OS_TV)
     if (@available(macOS 10.15, iOS 13.0, tvOS 13.0, *)) {
         writer->appendBool("hasUnifiedMemory", fDevice.hasUnifiedMemory);
     }
+#endif
 #endif
 #ifdef SK_BUILD_FOR_MAC
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 101500
@@ -1930,10 +1934,12 @@ void GrMtlGpu::onDumpJSON(SkJSONWriter* writer) const {
     if (@available(macOS 10.14, iOS 12.0, tvOS 12.0, *)) {
         writer->appendU64("maxArgumentBufferSamplerCount", fDevice.maxArgumentBufferSamplerCount);
     }
+#if !(defined(TARGET_OS_TV) && TARGET_OS_TV)
 #ifdef SK_BUILD_FOR_IOS
     if (@available(iOS 13.0, tvOS 13.0, *)) {
         writer->appendU64("sparseTileSizeInBytes", fDevice.sparseTileSizeInBytes);
     }
+#endif
 #endif
     writer->endObject();
 
