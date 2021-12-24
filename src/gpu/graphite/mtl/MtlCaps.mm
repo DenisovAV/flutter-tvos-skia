@@ -181,8 +181,6 @@ bool MtlCaps::GetGPUFamily(id<MTLDevice> device, GPUFamily* gpuFamily, int* grou
 #if SKGPU_GRAPHITE_METAL_SDK_VERSION >= 220
     if (@available(macOS 10.15, iOS 13.0, tvOS 13.0, *)) {
         // Apple Silicon
-#if !(defined(TARGET_OS_TV) && TARGET_OS_TV)
-#if SKGPU_GRAPHITE_METAL_SDK_VERSION >= 230
         if ([device supportsFamily:MTLGPUFamilyApple7]) {
             *gpuFamily = GPUFamily::kApple;
             *group = 7;
@@ -246,8 +244,12 @@ bool MtlCaps::GetGPUFamily(id<MTLDevice> device, GPUFamily* gpuFamily, int* grou
         }
 #endif
     }
+#endif
 #else
-        if ([device supportsFamily:MTLGPUFamilyApple5]) {
+
+#if GR_METAL_SDK_VERSION >= 220
+    if (@available(macOS 10.15, iOS 13.0, tvOS 13.0, *)) {
+         if ([device supportsFamily:MTLGPUFamilyApple5]) {
             *gpuFamily = GPUFamily::kApple;
             *group = 5;
             return true;
@@ -272,7 +274,7 @@ bool MtlCaps::GetGPUFamily(id<MTLDevice> device, GPUFamily* gpuFamily, int* grou
             *group = 1;
             return true;
         }
-
+    }
 #endif
 #endif
 
