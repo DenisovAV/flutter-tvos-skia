@@ -181,6 +181,7 @@ bool MtlCaps::GetGPUFamily(id<MTLDevice> device, GPUFamily* gpuFamily, int* grou
 #if SKGPU_GRAPHITE_METAL_SDK_VERSION >= 220
     if (@available(macOS 10.15, iOS 13.0, tvOS 13.0, *)) {
         // Apple Silicon
+#if SKGPU_GRAPHITE_METAL_SDK_VERSION >= 230
         if ([device supportsFamily:MTLGPUFamilyApple7]) {
             *gpuFamily = GPUFamily::kApple;
             *group = 7;
